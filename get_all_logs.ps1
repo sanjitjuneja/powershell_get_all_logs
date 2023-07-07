@@ -2,8 +2,7 @@
 $logs = @(
 	"Security",
 	"System",
-	"Application",
-	"Software"
+	"Application"
 )
 
 # SPECIFY DESTINATION DIRECTORY
@@ -21,6 +20,9 @@ foreach ($log in $logs) {
 	$destinationFile = Join-Path -Path $tempDirectory -ChildPath "$log.csv"
 	Get-WinEvent -LogName $log -MaxEvents 1000 | Export-Csv -Path $destinationFile -NoTypeInformation -Force
 }
+
+# WAIT FOR ALL WRITES TO FINISH
+Start-Sleep -Seconds 15
 
 # CREATE ZIP FILE
 $zipFile = Join-Path -Path $destinationDirectory -ChildPath $zipFileName

@@ -1,66 +1,4 @@
-# SPECIFY FILES TO PULL
-$files = @(
-	"Security",
-	"System",
-	"Application",
-	"Software"
-)
-
-# SPECIFY SOURCE DIRECTORY
-$sourceDirectory = "C:\Windows\System32\config"
-
-# SPECIFY DESTINATION DIRECTORY
-$destinationDirectory = "C:\Users\Public\Documents"
-$zipFileName = "logs.zip"
-
-# CREATE TEMPORARY DIRECTORY
-$tempDirectory = Join-Path -Path $destinationDirectory -ChildPath "temp"
-if (!(Test-Path -Path $tempDirectory)) {
-	New-Item -ItemType Directory -Path $tempDirectory
-}
-
-# COPY FILES TO TEMPORARY DIRECTORY
-foreach ($file in $files) {
-	$sourceFile = Join-Path -Path $sourceDirectory -ChildPath "$file"
-	$destinationFile = Join-Path -Path $tempDirectory -ChildPath "$file"
-	Copy-Item -Path $sourceFile -Destination $destinationFile
-}
-
-# CREATE ZIP FILE
-$zipFile = Join-Path -Path $destinationDirectory -ChildPath $zipFileName
-if (Test-Path -Path $zipFile) {
-	Remove-Item -Path $zipFile
-}
-Compress-Archive -Path $tempDirectory -DestinationPath $zipFile
-
-# CLEAN UP TEMPORARY DIRECTORY
-Remove-Item -Path $tempDirectory -Recurse -Force
-
-# CHECK SIZE OF ZIP FILE (PRINT ERROR OR INITIATE DELAY)
-$zipFileSize = (Get-Item -Path $zipFile).length
-$zipFileSizeLimit = 3GB
-
-if ($zipFileSize -gt $zipFileSizeLimit) {
-	Remove-Item -Path $zipFile
-	Write-Host "ERROR: ZIP FILE SIZE EXCEEDS LIMIT OF 3GB. PLEASE RETRIEVE FILES MANUALLY."
-	exit
-} else {
-	Write-Host "SUCCESS: ZIP FILE CREATED. TO DOWNLOAD, PLEASE RUN: 'getfile path-C:\Users\Public\Documents\logs.zip'. PLEASE DELETE FILE AFTER DOWNLOAD."
-	exit
-}
-
-
-
-
 Errors:
-Get-WinEvent : There is not an event log on the localhost computer that matches "Software".
-At C:\ProgramData\Microsoft\Windows Defender Advanced Threat 
-Protection\Downloads\PSScript_{2E341F9B-0226-4873-A825-8AD97D46A15A}.ps1:22 char:2
-+     Get-WinEvent -LogName $log -MaxEvents 1000 | Export-Csv -Path $de ...
-+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : ObjectNotFound: (Software:String) [Get-WinEvent], Exception
-    + FullyQualifiedErrorId : NoMatchingLogsFound,Microsoft.PowerShell.Commands.GetWinEventCommand
- 
 ZipArchiveHelper : The process cannot access the file 'C:\Users\Public\Documents\temp\Security.csv' because it is 
 being used by another process.
 At 
@@ -83,21 +21,21 @@ char:38
 Remove-Item : Cannot remove item C:\Users\Public\Documents\temp\Security.csv: The process cannot access the file 
 'Security.csv' because it is being used by another process.
 At C:\ProgramData\Microsoft\Windows Defender Advanced Threat 
-Protection\Downloads\PSScript_{2E341F9B-0226-4873-A825-8AD97D46A15A}.ps1:33 char:1
+Protection\Downloads\PSScript_{68A474A4-DA87-472D-8DFB-C5A5F5942FD5}.ps1:35 char:1
 + Remove-Item -Path $tempDirectory -Recurse -Force
 + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : WriteError: (Security.csv:FileInfo) [Remove-Item], IOException
     + FullyQualifiedErrorId : RemoveFileSystemItemIOError,Microsoft.PowerShell.Commands.RemoveItemCommand
 Remove-Item : Cannot remove item C:\Users\Public\Documents\temp: The directory is not empty.
 At C:\ProgramData\Microsoft\Windows Defender Advanced Threat 
-Protection\Downloads\PSScript_{2E341F9B-0226-4873-A825-8AD97D46A15A}.ps1:33 char:1
+Protection\Downloads\PSScript_{68A474A4-DA87-472D-8DFB-C5A5F5942FD5}.ps1:35 char:1
 + Remove-Item -Path $tempDirectory -Recurse -Force
 + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : WriteError: (C:\Users\Public\Documents\temp:DirectoryInfo) [Remove-Item], IOException
     + FullyQualifiedErrorId : RemoveFileSystemItemIOError,Microsoft.PowerShell.Commands.RemoveItemCommand
 Get-Item : Cannot find path 'C:\Users\Public\Documents\logs.zip' because it does not exist.
 At C:\ProgramData\Microsoft\Windows Defender Advanced Threat 
-Protection\Downloads\PSScript_{2E341F9B-0226-4873-A825-8AD97D46A15A}.ps1:36 char:17
+Protection\Downloads\PSScript_{68A474A4-DA87-472D-8DFB-C5A5F5942FD5}.ps1:38 char:17
 + $zipFileSize = (Get-Item -Path $zipFile).length
 +                 ~~~~~~~~~~~~~~~~~~~~~~~
     + CategoryInfo          : ObjectNotFound: (C:\Users\Public\Documents\logs.zip:String) [Get-Item], ItemNotFoundExce 
