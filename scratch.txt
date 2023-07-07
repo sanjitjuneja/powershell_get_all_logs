@@ -48,3 +48,58 @@ if ($zipFileSize -gt $zipFileSizeLimit) {
 	Write-Host "SUCCESS: ZIP FILE CREATED. TO DOWNLOAD, PLEASE RUN: 'getfile path-C:\Users\Public\Documents\logs.zip'. PLEASE DELETE FILE AFTER DOWNLOAD."
 	exit
 }
+
+
+
+
+Errors:
+Get-WinEvent : There is not an event log on the localhost computer that matches "Software".
+At C:\ProgramData\Microsoft\Windows Defender Advanced Threat 
+Protection\Downloads\PSScript_{2E341F9B-0226-4873-A825-8AD97D46A15A}.ps1:22 char:2
++     Get-WinEvent -LogName $log -MaxEvents 1000 | Export-Csv -Path $de ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (Software:String) [Get-WinEvent], Exception
+    + FullyQualifiedErrorId : NoMatchingLogsFound,Microsoft.PowerShell.Commands.GetWinEventCommand
+ 
+ZipArchiveHelper : The process cannot access the file 'C:\Users\Public\Documents\temp\Security.csv' because it is 
+being used by another process.
+At 
+C:\Windows\system32\WindowsPowerShell\v1.0\Modules\Microsoft.PowerShell.Archive\Microsoft.PowerShell.Archive.psm1:697 
+char:30
++ ... sArchived = ZipArchiveHelper $subDirFiles.ToArray() $destinationPath  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : PermissionDenied: (C:\Users\Public...mp\Security.csv:String) [Write-Error], IOException
+    + FullyQualifiedErrorId : CompressArchiveUnauthorizedAccessError,ZipArchiveHelper
+ 
+New-Object : Exception calling ".ctor" with "1" argument(s): "Stream was not readable."
+At 
+C:\Windows\system32\WindowsPowerShell\v1.0\Modules\Microsoft.PowerShell.Archive\Microsoft.PowerShell.Archive.psm1:808 
+char:38
++ ...     $srcStream = New-Object System.IO.BinaryReader $currentFileStream
++                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidOperation: (:) [New-Object], MethodInvocationException
+    + FullyQualifiedErrorId : ConstructorInvokedThrowException,Microsoft.PowerShell.Commands.NewObjectCommand
+ 
+Remove-Item : Cannot remove item C:\Users\Public\Documents\temp\Security.csv: The process cannot access the file 
+'Security.csv' because it is being used by another process.
+At C:\ProgramData\Microsoft\Windows Defender Advanced Threat 
+Protection\Downloads\PSScript_{2E341F9B-0226-4873-A825-8AD97D46A15A}.ps1:33 char:1
++ Remove-Item -Path $tempDirectory -Recurse -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (Security.csv:FileInfo) [Remove-Item], IOException
+    + FullyQualifiedErrorId : RemoveFileSystemItemIOError,Microsoft.PowerShell.Commands.RemoveItemCommand
+Remove-Item : Cannot remove item C:\Users\Public\Documents\temp: The directory is not empty.
+At C:\ProgramData\Microsoft\Windows Defender Advanced Threat 
+Protection\Downloads\PSScript_{2E341F9B-0226-4873-A825-8AD97D46A15A}.ps1:33 char:1
++ Remove-Item -Path $tempDirectory -Recurse -Force
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : WriteError: (C:\Users\Public\Documents\temp:DirectoryInfo) [Remove-Item], IOException
+    + FullyQualifiedErrorId : RemoveFileSystemItemIOError,Microsoft.PowerShell.Commands.RemoveItemCommand
+Get-Item : Cannot find path 'C:\Users\Public\Documents\logs.zip' because it does not exist.
+At C:\ProgramData\Microsoft\Windows Defender Advanced Threat 
+Protection\Downloads\PSScript_{2E341F9B-0226-4873-A825-8AD97D46A15A}.ps1:36 char:17
++ $zipFileSize = (Get-Item -Path $zipFile).length
++                 ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\Public\Documents\logs.zip:String) [Get-Item], ItemNotFoundExce 
+   ption
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.GetItemCommand
