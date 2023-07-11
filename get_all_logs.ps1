@@ -16,24 +16,9 @@ if (!(Test-Path -Path $tempDirectory)) {
 }
 
 # EXPORT LOGS TO TEMPORARY DIRECTORY
-$jobs = @()
 foreach ($log in $logs) {
-    $destinationFile = Join-Path -Path $tempDirectory -ChildPath "$log.csv"
-    $jobs += Start-Job -ScriptBlock { 
-        Param($log, $destinationFile)
-        Get-WinEvent -LogName $log -MaxEvents 1000 | Export-Csv -Path $destinationFile -NoTypeInformation -Force 
-    } -ArgumentList $log, $destinationFile
-}
-
-# Wait for all jobs to complete and handle errors
-foreach ($job in $jobs) {
-    $result = Receive-Job -Job $job -Wait -ErrorAction SilentlyContinue
-    if ($job.State -eq 'Failed') {
-        Write-Host ("Job {0} failed with the following error: {1}" -f $job.Name, $job.JobStateInfo.Reason)
-        Remove-Job -Job $job
-    } else {
-        Remove-Job -Job $job
-    }
+    $destinationFile = Join-Path -Path $tempDirectory -ChildPath "$log.evtx"
+	wevtutil epl $log $destinationFile
 }
 
 # CREATE ZIP FILE
